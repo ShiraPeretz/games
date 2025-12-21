@@ -1,0 +1,137 @@
+/* ===== HOME / LANDING PAGE ===== */
+:root {
+    --bg-dark: #0b1120;
+    --primary: #00f2ff;
+    --secondary: #bd00ff;
+    --font-main: 'Rubik', sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    /* רקע תואם למשחקים */
+    background-image: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg-dark) 80%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    overflow: hidden;
+}
+
+/* העטיפה המרכזית */
+.home-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* כרטיס הכניסה */
+.home-card {
+    text-align: center;
+    background: rgba(30, 41, 59, 0.6); /* כהה ושקוף */
+    backdrop-filter: blur(20px);
+    padding: 60px;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.6);
+    max-width: 500px;
+    width: 90%;
+    animation: floatIn 1s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* אפקט זוהר עליון */
+.home-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+@keyframes floatIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* לוגו */
+.home-logo {
+    width: 140px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 20px rgba(189, 0, 255, 0.4));
+    animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* כותרות */
+.home-title {
+    font-size: 3.5rem;
+    margin: 0;
+    font-weight: 900;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+}
+
+.home-subtitle {
+    font-size: 1.2rem;
+    color: var(--primary);
+    margin-bottom: 40px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.4);
+}
+
+/* כפתורים */
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.home-btn {
+    padding: 15px 35px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+
+/* כפתור התחברות - בולט */
+.home-btn.login {
+    background: var(--primary);
+    color: #0b1120;
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+}
+
+.home-btn.login:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.6);
+    background: white;
+}
+
+/* כפתור הרשמה - שקוף עם מסגרת */
+.home-btn.register {
+    background: transparent;
+    border-color: white;
+    color: white;
+}
+
+.home-btn.register:hover {
+    background: white;
+    color: #0b1120;
+    transform: translateY(-3px);
+}

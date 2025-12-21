@@ -1,0 +1,300 @@
+/* ===== משתנים ועיצוב בסיסי ===== */
+:root {
+    --bg-dark: #0b1120;
+    --bg-card: rgba(30, 41, 59, 0.7);
+    --primary: #00f2ff; /* Cyan Neon */
+    --secondary: #bd00ff; /* Purple Neon */
+    --text-main: #f8fafc;
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --font-main: 'Rubik', sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-main);
+    background-color: var(--bg-dark);
+    min-height: 100vh;
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* ===== TOP NAV (הבר העליון) ===== */
+.top-header {
+    background: rgba(15, 23, 42, 0.95);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left { display: flex; align-items: center; gap: 20px; }
+
+/* לוגו קטן בבר העליון */
+.top-header img {
+    max-height: 50px; 
+    width: auto;
+}
+
+.user-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 15px;
+    border-radius: 50px;
+    border: 1px solid var(--glass-border);
+}
+
+#logoutBtn {
+    background: transparent;
+    border: 1px solid #ff4757;
+    color: #ff4757;
+    padding: 4px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+#logoutBtn:hover {
+    background: #ff4757;
+    color: white;
+}
+
+/* ===== כותרת ראשית (מעוצבת מחדש) ===== */
+.games-section {
+    text-align: center; /* ממרכז את הטקסט */
+    padding: 40px 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* עיצוב הכותרת "ברוכה הבאה" */
+.games-section h2 {
+    font-size: 3.5rem; /* טקסט גדול ומרשים */
+    margin: 0 0 10px 0;
+    font-weight: 900;
+    
+    /* אפקט צבע הדרגתי (Gradient) לטקסט */
+    background: linear-gradient(to right, #00f2ff, #bd00ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* זוהר */
+    filter: drop-shadow(0 0 15px rgba(189, 0, 255, 0.4));
+}
+
+/* עיצוב תת-הכותרת "בחרי משחק..." */
+.games-section p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* ===== גריד המשחקים (5 בשורה) ===== */
+.games-grid {
+    display: grid;
+    /* שינוי קריטי: הקטנו את המינימום ל-220px 
+       כדי שיכנסו יותר כרטיסים בשורה אחת 
+    */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 25px;
+    
+    /* הרחבנו את הרוחב המקסימלי כדי שיהיה מקום ל-5 כרטיסים */
+    max-width: 90%; 
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* ===== כרטיסי משחק ===== */
+.game-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 15px; /* טיפה הקטנו את הריווח הפנימי */
+    text-align: center;
+    transition: 0.3s;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+/* פס צבע עליון לכרטיס */
+.game-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s;
+}
+
+.game-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.game-card:hover::before {
+    transform: scaleX(1);
+}
+
+.game-thumb {
+    width: 100%;
+    height: 130px; /* גובה אחיד לתמונות */
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.game-card h3 {
+    margin: 5px 0;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.game-card p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+/* כרטיס לא פעיל */
+.game-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+.game-card.disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ===== כפתור פרופיל ===== */
+.profile-btn {
+    background: var(--primary);
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.profile-btn:hover {
+    box-shadow: 0 0 15px var(--primary);
+}
+
+/* ===== מודל פרופיל (חלון קופץ) ===== */
+/* ===== מודל פרופיל (חלון קופץ) - תיקון מרכוז אבסולוטי ===== */
+.modal {
+    display: none; /* מוסתר כברירת מחדל */
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.85); /* רקע כהה */
+    backdrop-filter: blur(5px); /* טשטוש הרקע */
+}
+
+/* גם אם ה-JS משנה ל-display:block, העיצוב הפנימי יסדר את המיקום */
+.modal.active {
+    display: block; 
+}
+
+.modal-content {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 450px;
+    max-width: 90%; /* למובייל */
+    padding: 40px;
+    border-radius: 24px;
+    color: white;
+    text-align: right;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+    /* === הטריק למרכוז שתמיד עובד === */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* הפקודה הזו מזיזה את החלון בדיוק למרכז שלו ביחס למסך */
+    transform: translate(-50%, -50%);
+    margin: 0; /* ביטול שוליים שעלולים להפריע */
+
+    /* אנימציית כניסה מותאמת למרכוז */
+    animation: popInCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* הגדרת אנימציה שמתחשבת במיקום החדש */
+@keyframes popInCenter {
+    from { 
+        opacity: 0; 
+        /* מתחיל קצת למעלה וקטן */
+        transform: translate(-50%, -60%) scale(0.8); 
+    }
+    to { 
+        opacity: 1; 
+        /* מגיע למרכז המדויק בגודל מלא */
+        transform: translate(-50%, -50%) scale(1); 
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px; left: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #94a3b8;
+    background: rgba(255,255,255,0.05);
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.close-btn:hover {
+    color: white;
+    background: #ff4757;
+}
+
+.profile-section {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-section h3 {
+    margin-top: 0;
+    color: #00f2ff;
+}
+
+.btn-leaderboard {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #1a1a1a;
+    text-align: center;
+    padding: 15px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-weight: 800;
+    margin-top: 25px;
+    box-sizing: border-box;
+    transition: transform 0.2s;
+}
+
+.btn-leaderboard:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+}

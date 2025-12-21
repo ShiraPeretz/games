@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayIT | בחר שלב</title>
+    <link rel="stylesheet" href="../css/games.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* עיצוב ספציפי למפה - אפשר להעביר ל-css נפרד */
+        .levels-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+
+        .level-card {
+            width: 200px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* שלב פתוח */
+        .level-card.unlocked:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 234, 255, 0.4);
+            border-color: #00eaff;
+        }
+
+        /* שלב נעול */
+        .level-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .level-num {
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .level-stars {
+            font-size: 24px;
+            color: #ffd700; /* זהב */
+            height: 30px;
+        }
+
+        .lock-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        
+        .level-title {
+            font-size: 18px;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo-title">מסע הטריוויה 🚀</div>
+        <button class="profile-btn" onclick="location.href='games.html'">חזרה לתפריט</button>
+    </header>
+
+    <div class="games-section">
+        <h2>בחר שלב כדי להתחיל</h2>
+        <div id="levelsGrid" class="levels-container">
+            </div>
+    </div>
+
+    <script src="../js/storage.js"></script>
+    <script>
+        // יצירת המפה דינמית
+        const levelsGrid = document.getElementById("levelsGrid");
+        const progress = getUserProgress("trivia"); // פונקציה חדשה מ-storage.js
+        
+        // נגדיר שמות לשלבים (אפשר להוסיף עוד)
+        const levelNames = ["מתחילים", "מתקדמים", "מומחים", "גאונים", "הבוס הגדול"];
+
+        for (let i = 1; i <= 5; i++) {
+            const isUnlocked = i <= progress.maxLevel;
+            const stars = progress.levels[i] || 0;
+            const starString = "⭐".repeat(stars) + "☆".repeat(3 - stars); // תמיד מציג 3 כוכבים (מלאים או ריקים)
+
+            const card = document.createElement("div");
+            card.className = `level-card ${isUnlocked ? 'unlocked' : 'locked'}`;
+            
+            if (isUnlocked) {
+                card.innerHTML = `
+                    <div class="level-num">${i}</div>
+                    <div class="level-stars">${starString}</div>
+                    <div class="level-title">${levelNames[i-1]}</div>
+                `;
+                card.onclick = () => location.href = `trivia.html?level=${i}`;
+            } else {
+                card.innerHTML = `
+                    <div class="lock-icon">🔒</div>
+                    <div class="level-title">נעול</div>
+                `;
+            }
+
+            levelsGrid.appendChild(card);
+        }
+    </script>
+</body>
+</html>

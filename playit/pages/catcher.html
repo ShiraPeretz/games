@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayIT | תופס המטבעות</title>
+    <link rel="stylesheet" href="../css/games.css">
+    <link rel="stylesheet" href="../css/catcher.css">
+</head>
+<body>
+
+    <button class="back-home" onclick="location.href='games.html'">→ יציאה</button>
+
+    <div class="game-wrapper">
+        <div class="stats-bar">
+            <div>ניקוד: <span id="score">0</span></div>
+            <div>חיים: <span id="lives">❤️❤️❤️</span></div>
+            <div style="color: #ffcc00;">פספוסים: <span id="missed">0</span>/10</div>
+        </div>
+
+        <div id="gameBoard" class="game-board">
+            <div id="player" class="player">🛒</div>
+        </div>
+        
+        <div class="controls-hint">השתמשי בחצים ⬅️ ➡️ כדי לזוז | היזהרי מדינמיט!</div>
+
+        <div id="gameOverModal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <h2 id="endTitle">המשחק נגמר!</h2>
+                <p id="endReason"></p> <p>השגת <span id="finalScore">0</span> נקודות</p>
+                <button onclick="restartGame()">שחקי שוב</button>
+                <button onclick="location.href='games.html'" class="secondary">יציאה</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/storage.js"></script>
+    <script src="../js/catcher.js"></script>
+</body>
+</html>

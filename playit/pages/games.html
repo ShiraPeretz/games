@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayIT | משחקים</title>
+    <link rel="stylesheet" href="../css/games.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* כפתור מעבר לטבלת המובילים בפרופיל */
+        .btn-leaderboard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-sizing: border-box; /* חשוב כדי שלא יחרוג מהמסגרת */
+        }
+
+        .btn-leaderboard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="top-header">
+    <img src="../img/logo.png" class="small-logo" alt="logo">
+    <div class="user-box">
+        <span id="currentUser"></span>
+        <button id="profileBtn" class="profile-btn">פרופיל</button>
+        <button id="logoutBtn">התנתקות</button>
+    </div>
+</header>
+
+<div id="profileModal" class="modal">
+    <div class="modal-content">
+        <span id="closeProfile" class="close-btn">&times;</span>
+
+        <h2>פרופיל משתמש</h2>
+
+        <div class="profile-section">
+            <strong>שם מלא:</strong> <span id="profFullName"></span>
+        </div>
+
+        <div class="profile-section">
+            <strong>שם משתמש:</strong> <span id="profUsername"></span>
+        </div>
+
+        <div class="profile-section">
+            <strong>נרשם בתאריך:</strong> <span id="profCreated"></span>
+        </div>
+
+        <hr>
+
+        <h3>נתוני משחק</h3>
+
+        <div class="profile-section">
+            <strong>טריוויה:</strong>
+            <span id="profTriviaStats"></span>
+        </div>
+
+        <div class="profile-section">
+            <strong>תפיסת מטבעות:</strong>
+            <span id="profCatcherStats"></span>
+        </div>
+
+        <hr>
+
+        <h3>הישגים</h3>
+        <ul id="profAchievements"></ul>
+
+        <a href="leaderboard.html" class="btn-leaderboard">
+            🏆 לרשימת המובילים
+        </a>
+
+    </div>
+</div>
+
+<section class="games-section">
+    <h2>ברוכה הבאה ל־PlayIT!</h2>
+    <p>בחרי משחק כדי להתחיל</p>
+
+    <div class="games-grid" id="gamesContainer"></div>
+    </section>
+
+<script src="../js/storage.js"></script>
+<script src="../js/games.js"></script>
+</body>
+</html>
