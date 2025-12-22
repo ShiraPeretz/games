@@ -11,26 +11,54 @@
 
 body {
     margin: 0;
-    font-family: var(--font-main);
-    background-color: var(--bg-dark);
-    min-height: 100vh;
-    color: var(--text-main);
-    overflow-x: hidden;
+    font-family: 'Rubik', sans-serif;
+    background:
+        radial-gradient(circle at top left, #2a3cff 0%, transparent 45%),
+        radial-gradient(circle at bottom right, #c77dff 0%, transparent 45%),
+        linear-gradient(135deg, #0e1338, #1a3752);
+    color: #f4f6ff;
 }
+
 
 /* ===== TOP NAV (הבר העליון) ===== */
 .top-header {
-    background: rgba(15, 23, 42, 0.95);
-    padding: 10px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--glass-border);
-    height: 70px;
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 14px 28px;
+    background: rgba(20, 25, 70, 0.6);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
+.categories-bar {
+    display: flex;
+    gap: 10px;
+}
+
+.cat-btn {
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: #dbe1ff;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.cat-btn:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+.cat-btn.active {
+    background: linear-gradient(90deg, #00e5ff, #8f7bff);
+    color: #0b0f2e;
+    font-weight: 700;
+}
+
 
 .nav-left { display: flex; align-items: center; gap: 20px; }
 
@@ -74,28 +102,19 @@ body {
     align-items: center;
 }
 
-/* עיצוב הכותרת "ברוכה הבאה" */
 .games-section h2 {
-    font-size: 3.5rem; /* טקסט גדול ומרשים */
-    margin: 0 0 10px 0;
+    font-size: 2.6rem;
     font-weight: 900;
-    
-    /* אפקט צבע הדרגתי (Gradient) לטקסט */
-    background: linear-gradient(to right, #00f2ff, #bd00ff);
+    background: linear-gradient(90deg, #00e5ff, #c77dff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
-    /* זוהר */
-    filter: drop-shadow(0 0 15px rgba(189, 0, 255, 0.4));
 }
 
-/* עיצוב תת-הכותרת "בחרי משחק..." */
 .games-section p {
-    font-size: 1.2rem;
-    color: #94a3b8;
-    margin: 0;
-    letter-spacing: 1px;
+    color: #cfd6ff;
+    font-size: 1.1rem;
 }
+
 
 /* ===== גריד המשחקים (5 בשורה) ===== */
 .games-grid {
@@ -114,17 +133,19 @@ body {
 
 /* ===== כרטיסי משחק ===== */
 .game-card {
-    background: var(--bg-card);
-    border: 1px solid var(--glass-border);
-    border-radius: 20px;
-    padding: 15px; /* טיפה הקטנו את הריווח הפנימי */
-    text-align: center;
-    transition: 0.3s;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    position: relative;
-    overflow: hidden;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    padding: 16px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+
+.game-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
 
 /* פס צבע עליון לכרטיס */
 .game-card::before {
@@ -297,4 +318,55 @@ body {
 .btn-leaderboard:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+}
+
+ /* כפתור מעבר לטבלת המובילים בפרופיל */
+        .btn-leaderboard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-sizing: border-box; /* חשוב כדי שלא יחרוג מהמסגרת */
+        }
+
+        .btn-leaderboard:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+.icon-btn {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 1.1rem;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.icon-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.08);
+}
+
+.icon-btn.logout {
+    color: #ffb4b4;
+}
+
+.icon-btn.logout:hover {
+    background: rgba(255, 0, 0, 0.25);
 }
