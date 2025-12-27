@@ -1,41 +1,60 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>GameHub - טבלת מובילים</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - Leaderboard</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/leaderboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body class="leaderboard-page">
 
-    <div class="main-wrapper">
-        <header>
-            <h1 class="lb-title">היכל התהילה</h1>
-            <p class="subtitle">מי השחקן הטוב ביותר?</p>
-        </header>
+<div class="main-wrapper">
+    <header>
+        <h1 class="lb-title">Hall of Fame</h1>
+        <p class="subtitle">Who is the best player?</p>
+    </header>
 
-        <div class="podium-container" id="podium"></div>
+    <div class="podium-container" id="podium"></div>
 
-        <div class="list-container">
-            <div class="list-header">
-                <span>#</span>
-                <span>שחקן</span>
-                <span>ניצחונות</span>
-                <span>ניקוד</span>
-            </div>
-            <div class="scroll-area" id="rankingList">
-                </div>
+    <div class="list-container">
+        <div class="list-header">
+            <span>#</span>
+            <span>Player</span>
+            <span>Wins</span>
+            <span>Score</span>
         </div>
 
-        <div class="actions">
-            <a href="games.html" class="back-btn">
-                <i class="fas fa-gamepad"></i> חזרה למשחקים
-            </a>
+        <div class="scroll-area" id="rankingList">
+            <!-- Rows are injected by leaderboard.js -->
         </div>
     </div>
 
-    <script src="../js/storage.js"></script> <script src="../js/users.js"></script>
-    <script src="../js/leaderboard.js"></script>
+    <p class="subtitle">My last 5 games</p>
+    <div class="list-container my-history-card">
+        <div class="list-header my-history-header">
+            <span>Win</span>
+            <span>Game</span>
+            <span>Score</span>
+            <span>Date</span>
+        </div>
+
+        <div class="scroll-area my-history-list" id="myHistoryList"></div>
+    </div>
+
+
+    <div class="actions">
+        <a href="games.html" class="back-btn">
+            <i class="fas fa-gamepad"></i> Back to Games
+        </a>
+    </div>
+</div>
+
+<script src="../js/storage.js"></script>
+<script src="../js/leaderboard.js"></script>
+
 </body>
 </html>

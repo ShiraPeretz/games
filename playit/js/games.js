@@ -1,95 +1,111 @@
-/***********************
- * USER LOGIN + LOGOUT *
- ***********************/
+/* js/games.js */
+
+/************************
+ * USER LOGIN + LOGOUT  *
+ ************************/
 const currentUserSpan = document.getElementById("currentUser");
 const logoutBtn = document.getElementById("logoutBtn");
 
-const username = getCurrentUser();
+//const username = getCurrentUser();
+// If no logged-in user → redirect to login page
+//if (!username) { 
+//  location.href = "../auth/login.html";
+//}
 
+const username = getCurrentUser();
 if (!username) {
-    location.href = "../auth/login.html";
+  location.href = "../auth/login.html";
 }
 
-currentUserSpan.textContent = "משתמשת: " + username;
+// Display current username
+currentUserSpan.textContent = "User: " + username;
 
+// Logout logic
 logoutBtn.onclick = () => {
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("session");
+    //clearSessionCookie();
     location.href = "../auth/login.html";
 };
 
-
-
-/**************************
- *     PROFILE MODAL      *
- **************************/
+/************************
+ *     PROFILE MODAL    *
+ ************************/
 const profileBtn = document.getElementById("profileBtn");
 const profileModal = document.getElementById("profileModal");
-const closeProfile = document.getElementById("closeProfile");
+const closeProfileBtn = document.getElementById("closeProfile");
 
+// Open profile modal
 profileBtn.onclick = () => {
     fillProfileData();
     profileModal.style.display = "block";
 };
 
-closeProfile.onclick = () => {
+// Close modal via X button
+closeProfileBtn.onclick = () => {
     profileModal.style.display = "none";
 };
 
-window.onclick = (e) => {
+//// Close modal by clicking outside
+//window.onclick = (e) => {
+//    if (e.target === profileModal) {
+//        profileModal.style.display = "none";
+//    }
+//};
+
+window.addEventListener("click", (e) => {
     if (e.target === profileModal) {
         profileModal.style.display = "none";
     }
-};
+});
 
-
-/**************************
- *  FILL PROFILE DETAILS  *
- **************************/
+/************************
+ *  FILL PROFILE DATA   *
+ ************************/
 function fillProfileData() {
     const users = loadUsers();
-    const username = getCurrentUser();
+    //const username = getCurrentUser();
     const user = users.find(u => u.username === username);
+    if (!user) return; 
 
     document.getElementById("profFullName").textContent = user.fullName;
     document.getElementById("profUsername").textContent = user.username;
     document.getElementById("profCreated").textContent =
-        new Date(user.createdAt).toLocaleDateString("he-IL");
+        new Date(user.createdAt).toLocaleDateString("en-US");
 
     document.getElementById("profTriviaStats").textContent =
-        `שיחקה ${user.stats.trivia.plays} פעמים | ניקוד גבוה: ${user.stats.trivia.bestScore}`;
+        `Played ${user.stats.trivia.plays} times | Best score: ${user.stats.trivia.bestScore}`;
 
     document.getElementById("profCatcherStats").textContent =
-        `שיחקה ${user.stats.catcher.plays} פעמים | שיא: ${user.stats.catcher.bestScore}`;
+        `Played ${user.stats.catcher.plays} times | Best score: ${user.stats.catcher.bestScore}`;
 
-    const achList = document.getElementById("profAchievements");
-    achList.innerHTML = "";
+    const achievementsList = document.getElementById("profAchievements");
+    achievementsList.innerHTML = "";
 
     if (user.achievements && user.achievements.length > 0) {
-        user.achievements.forEach(a => {
+        user.achievements.forEach(achievement => {
             const li = document.createElement("li");
-            li.textContent = a;
-            achList.appendChild(li);
+            li.textContent = achievement;
+            achievementsList.appendChild(li);
         });
     } else {
-        achList.innerHTML = "<li>אין עדיין הישגים 🎯</li>";
+        achievementsList.innerHTML = "<li>No achievements yet 🎯</li>";
     }
 }
 
-
-/**************************
- *   GENERATE GAME CARDS  *
- **************************/
-
+/************************
+ *   GENERATE GAME CARDS *
+ ************************/
 const gamesList = [
-    { title: "טריוויה", desc: "אתגר חשיבה", image: "img1.png", link: "levels.html", active: true },
-    { title: "תפיסת מטבעות", desc: "משחק תנועה", image: "img2.png", link: "catcher.html", active: true }
+    { title: "Trivia", desc: "Thinking challenge", image: "img1.png", link: "levels.html", active: true },
+    { title: "Coin Catcher", desc: "Action game", image: "img2.png", link: "catcher.html", active: true }
 ];
 
-// הוספת 30 משחקים בפיתוח (img3 עד img32)
+// Add 30 games in development (img3 – img32)
 for (let i = 3; i <= 32; i++) {
     gamesList.push({
-        title: "בפיתוח…",
-        desc: "בקרוב…",
+        title: "Coming Soon…",
+        desc: "In development…",
         image: `img${i}.png`,
         active: false
     });
@@ -97,6 +113,7 @@ for (let i = 3; i <= 32; i++) {
 
 const container = document.getElementById("gamesContainer");
 
+// Create cards dynamically
 gamesList.forEach(game => {
     const card = document.createElement("div");
     card.className = game.active ? "game-card clickable" : "game-card disabled";
@@ -113,5 +130,3 @@ gamesList.forEach(game => {
 
     container.appendChild(card);
 });
-
-

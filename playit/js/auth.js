@@ -1,7 +1,7 @@
 /* js/auth.js */
 
 /********************
- * REGISTER (הרשמה)
+ * REGISTER (Sign Up)
  ********************/
 const registerForm = document.getElementById("registerForm");
 
@@ -9,15 +9,15 @@ if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const users = loadUsers(); // פונקציה מ-storage.js
+        const users = loadUsers(); // function from storage.js
         const fullName = document.getElementById("fullName").value;
-        const username = document.getElementById("username").value;
-        const email = document.getElementById("email").value;
+        const username = document.getElementById("username").value.trim();
+        const email = document.getElementById("email").value.trim().toLowerCase();
         const password = document.getElementById("password").value;
 
-        // בדיקה אם המשתמש קיים
+        // Check if the username already exists
         if (users.find(u => u.username === username)) {
-            alert("שם המשתמש כבר קיים במערכת");
+            alert("Username already exists");
             return;
         }
 
@@ -27,10 +27,12 @@ if (registerForm) {
             email,
             password,
             createdAt: new Date().toISOString(),
-            // שדות לאבטחה
-            loginAttempts: 0, 
+
+            // Security fields
+            loginAttempts: 0,
             blockedUntil: null,
-            // נתונים למשחקים
+
+            // Game data
             stats: {
                 trivia: { plays: 0, bestScore: 0 },
                 catcher: { plays: 0, bestScore: 0 }
@@ -40,14 +42,14 @@ if (registerForm) {
 
         users.push(newUser);
         saveUsers(users);
-        
-        // התחברות אוטומטית לאחר הרשמה
+
+        // Auto login after registration
         performLogin(username);
     });
 }
 
 /********************
- * LOGIN (התחברות)
+ * LOGIN (Sign In)
  ********************/
 const loginForm = document.getElementById("loginForm");
 
@@ -55,76 +57,75 @@ if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const username = document.getElementById("loginUsername").value;
+        const username = document.getElementById("loginUsername").value.trim();
         const password = document.getElementById("loginPassword").value;
         const users = loadUsers();
-        
-        // חיפוש המשתמש (לא בודקים סיסמה עדיין)
+
+        // Find the user (do not check password yet)
         const userIndex = users.findIndex(u => u.username === username);
         const user = users[userIndex];
 
         if (!user) {
-            alert("שם משתמש או סיסמה שגויים"); // הודעה כללית לאבטחה
+            // Generic message for security
+            alert("Username or password is incorrect");
             return;
         }
 
-        // 1. בדיקה אם המשתמש חסום
+        // 1) Check if the account is currently blocked
         if (user.blockedUntil && new Date(user.blockedUntil) > new Date()) {
             const remainingTime = Math.ceil((new Date(user.blockedUntil) - new Date()) / 1000);
-            alert(`החשבון חסום עקב ריבוי ניסיונות. נסה שוב בעוד ${remainingTime} שניות.`);
+            alert(`Account blocked due to too many failed attempts. Try again in ${remainingTime} seconds.`);
             return;
         }
 
-        // 2. בדיקת סיסמה
+        // 2) Check password
         if (user.password === password) {
-            // -- הצלחה --
-            
-            // איפוס ניסיונות כושלים וחסימות
+            // --- SUCCESS ---
+
+            // Reset failed attempts and block status
             user.loginAttempts = 0;
             user.blockedUntil = null;
-            saveUsers(users); // שמירת האיפוס
+            saveUsers(users); // save the reset
 
             performLogin(username);
 
         } else {
-            // -- כישלון --
-            
+            // --- FAILURE ---
+
             user.loginAttempts = (user.loginAttempts || 0) + 1;
-            
-            // חסימה אחרי 3 ניסיונות
+
+            // Block after 3 attempts
             if (user.loginAttempts >= 3) {
-                // חסימה לדקה אחת (60000 מילישניות)
+                // Block for 1 minute (60,000 ms)
                 user.blockedUntil = new Date(Date.now() + 60 * 1000).toISOString();
-                user.loginAttempts = 0; // איפוס המונה כדי שיתחיל מחדש אחרי החסימה
-                alert("סיסמה שגויה 3 פעמים. החשבון נחסם לדקה!");
+                user.loginAttempts = 0; // reset counter so it starts fresh after block
+                alert("Wrong password 3 times. Account blocked for one minute!");
             } else {
-                alert(`סיסמה שגויה. נותרו לך ${3 - user.loginAttempts} ניסיונות לפני חסימה.`);
+                alert(`Wrong password. You have ${3 - user.loginAttempts} attempts left before being blocked.`);
             }
-            
-            saveUsers(users); // שמירת המונה המעודכן
+            saveUsers(users); // save updated counter/block
         }
     });
 }
 
-/* פונקציית עזר לביצוע הכניסה (משותפת להרשמה ולהתחברות) */
+/* Helper function to log in (shared by registration and login) */
 function performLogin(username) {
-    setCurrentUser(username); // מ-storage.js
+    setCurrentUser(username); // from storage.js
 
-    // --- דרישת Session Timeout ---
-    // שמירת זמן היצירה של ה-Session (עכשיו)
-    // נגדיר תוקף של 20 דקות
+    // --- Session Timeout requirement ---
+    // Save session creation time (now) and set expiry for 20 minutes
     const sessionData = {
         user: username,
-        expiry: new Date(Date.now() + 20 * 60 * 1000).toISOString() // 20 דקות מעכשיו
+        expiry: new Date(Date.now() + 20 * 60 * 1000).toISOString() // 20 minutes from now
     };
     localStorage.setItem("session", JSON.stringify(sessionData));
+    // setSessionCookie(username, 20);
 
-    // אפקטים ומעבר עמוד
+    // Effects and page redirect
     if (typeof launchConfetti === "function") launchConfetti();
-    
+
     setTimeout(() => {
-        // אם אנחנו בתיקיית auth (כמו login.html), צריך לצאת החוצה ואז ל-pages
-        // אם אנחנו ב-index.html, הנתיב שונה. נניח שאנחנו ב-auth:
-        location.href = "../pages/games.html"; 
+        // If we are inside /auth (like login.html), go up and then to /pages
+        location.href = "../pages/games.html";
     }, 1500);
 }

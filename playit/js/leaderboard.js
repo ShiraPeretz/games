@@ -1,88 +1,162 @@
-/* js/leaderboard.js - גרסה שמציגה נתונים תמיד לעיצוב */
+/* js/leaderboard.js */
 
 document.addEventListener("DOMContentLoaded", () => {
-    const podiumContainer = document.getElementById("podium");
-    const listContainer = document.getElementById("rankingList");
+  const podiumContainer = document.getElementById("podium");
+  const listContainer = document.getElementById("rankingList");
 
-    // === נתונים לדוגמה (Hardcoded) לעיצוב ===
-    // המערך הזה ירוץ תמיד, גם אם אין משתמשים אמיתיים במערכת
-    let users = [
-        { username: "CyberKing", calculatedScore: 3500, triviaWins: 15 },
-        { username: "QueenB", calculatedScore: 2800, triviaWins: 12 },
-        { username: "PixelPro", calculatedScore: 2450, triviaWins: 9 },
-        { username: "Glitch", calculatedScore: 1800, triviaWins: 5 },
-        { username: "RetroGamer", calculatedScore: 1200, triviaWins: 3 },
-        { username: "Newbie", calculatedScore: 500, triviaWins: 1 }
-    ];
+  // אם האלמנטים לא קיימים – לא עושים כלום (כדי לא לקרוס)
+  if (!podiumContainer || !listContainer) return;
 
-    // מנסים להביא את המשתמש הנוכחי רק כדי להדגיש אותו אם הוא קיים
-    let currentUser = null;
+  // ---------- Safe helpers ----------
+  const safeLoadUsers = () => {
     try {
-        if (typeof UserStore !== 'undefined') {
-            const realUsers = UserStore.loadUsers();
-            // אם יש משתמשים אמיתיים, נשתמש בהם במקום המזויפים (אופציונלי - כרגע נשאיר מזויפים לעיצוב)
-            // users = realUsers.length > 0 ? realUsers : users;
-            currentUser = UserStore.getCurrentUser();
-        }
-    } catch (e) {
-        console.log("Design mode: Running without UserStore");
-    }
+      if (typeof loadUsers === "function") return loadUsers();
+    } catch (e) {}
+    return [];
+  };
 
-    // מיון לפי ניקוד
-    users.sort((a, b) => b.calculatedScore - a.calculatedScore);
+  const safeGetCurrentUser = () => {
+    try {
+      if (typeof getCurrentUser === "function") return getCurrentUser();
+    } catch (e) {}
+    return null;
+  };
 
-    // ניקוי
-    podiumContainer.innerHTML = "";
+  const safeGetRecentGameHistory = (limit = 10) => {
+    try {
+      if (typeof getRecentGameHistory === "function") return getRecentGameHistory(limit);
+    } catch (e) {}
+    return [];
+  };
+
+  // ---------- Get real users ----------
+  let realUsers = safeLoadUsers();
+  const currentUsername = safeGetCurrentUser();
+
+  // ---------- Demo fallback ----------
+  if (!Array.isArray(realUsers) || realUsers.length === 0) {
+    realUsers = [
+      { username: "ytamir", stats: { trivia: { bestScore: 120, wins: 2 }, catcher: { bestScore: 71 } } },
+      { username: "Ntamir", stats: { trivia: { bestScore: 90, wins: 1 }, catcher: { bestScore: 81 } } },
+      { username: "shira",  stats: { trivia: { bestScore: 0, wins: 0 }, catcher: { bestScore: 0 } } },
+      { username: "CyberKing", stats: { trivia: { bestScore: 60, wins: 1 }, catcher: { bestScore: 30 } } },
+    ];
+  }
+
+  // ---------- Build leaderboard ----------
+  const users = realUsers.map(u => {
+    const triviaBest = u?.stats?.trivia?.bestScore ?? 0;
+    const catcherBest = u?.stats?.catcher?.bestScore ?? 0;
+    const wins = u?.stats?.trivia?.wins ?? 0;
+
+    return {
+      username: u?.username || "Unknown",
+      calculatedScore: Number(triviaBest) + Number(catcherBest),
+      wins: Number(wins)
+    };
+  });
+
+  if (users.length === 0) {
+    podiumContainer.innerHTML = "<div style='color:white;opacity:0.7'>No users yet</div>";
     listContainer.innerHTML = "";
+    renderMyLast5Games(safeGetRecentGameHistory, safeGetCurrentUser); // עדיין ננסה היסטוריה
+    return;
+  }
 
-    // === בניית הפודיום (3 הראשונים) ===
-    const topUsers = users.slice(0, 3);
-    
-    topUsers.forEach((user, index) => {
-        const place = index + 1;
-        const isCurrent = currentUser && currentUser.username === user.username;
-        const firstLetter = user.username.charAt(0).toUpperCase();
-        
-        // הוספת כתר למקום הראשון
-        const crownHtml = place === 1 ? '<div class="crown-icon">👑</div>' : '';
+  // sort
+  users.sort((a, b) => {
+    if (b.calculatedScore !== a.calculatedScore) return b.calculatedScore - a.calculatedScore;
+    return b.wins - a.wins;
+  });
 
-        const podiumItem = document.createElement("div");
-        podiumItem.className = `podium-item place-${place}`;
-        
-        podiumItem.innerHTML = `
-            <div class="podium-avatar ${isCurrent ? 'current-user-highlight' : ''}">
-                ${crownHtml}
-                ${firstLetter}
-            </div>
-            <div class="podium-rank">
-                <div class="username">${user.username}</div>
-                <div class="score">${user.calculatedScore}</div> 
-            </div>
-        `;
-        
-        podiumContainer.appendChild(podiumItem);
-    });
+  podiumContainer.innerHTML = "";
+  listContainer.innerHTML = "";
 
-    // === בניית הרשימה (מקום 4 ומטה) ===
-    const restUsers = users.slice(3);
-    
-    if (restUsers.length > 0) {
-        restUsers.forEach((user, index) => {
-            const rank = index + 4;
-            const isCurrent = currentUser && currentUser.username === user.username;
-            const wins = user.triviaWins || 0;
+  // ---------- Podium top 3 ----------
+  const topUsers = users.slice(0, 3);
 
-            const row = document.createElement("div");
-            row.className = `list-item ${isCurrent ? 'current-user-highlight' : ''}`;
-            
-            row.innerHTML = `
-                <div class="rank-num">#${rank}</div>
-                <div class="player-info">${user.username}</div>
-                <div class="stat-val">${wins} נצ'</div>
-                <div class="score-val">${user.calculatedScore}</div>
-            `;
+  topUsers.forEach((user, index) => {
+    const place = index + 1;
+    const isCurrent = currentUsername && currentUsername === user.username;
+    const firstLetter = user.username.charAt(0).toUpperCase();
+    const crownHtml = place === 1 ? '<div class="crown-icon">👑</div>' : '';
 
-            listContainer.appendChild(row);
-        });
-    }
+    const podiumItem = document.createElement("div");
+    podiumItem.className = `podium-item place-${place}`;
+
+    podiumItem.innerHTML = `
+      <div class="podium-avatar ${isCurrent ? "current-user-highlight" : ""}">
+        ${crownHtml}
+        ${firstLetter}
+      </div>
+      <div class="podium-rank">
+        <div class="username">${user.username}</div>
+        <div class="score">${user.calculatedScore}</div>
+      </div>
+    `;
+
+    podiumContainer.appendChild(podiumItem);
+  });
+
+  // ---------- List: 4th and below ----------
+  const restUsers = users.slice(3);
+
+  restUsers.forEach((user, index) => {
+    const rank = index + 4;
+    const isCurrent = currentUsername && currentUsername === user.username;
+
+    const row = document.createElement("div");
+    row.className = `list-item ${isCurrent ? "current-user-highlight" : ""}`;
+
+    row.innerHTML = `
+      <div class="rank-num">#${rank}</div>
+      <div class="player-info">${user.username}</div>
+      <div class="stat-val">${user.wins}</div>
+      <div class="score-val">${user.calculatedScore}</div>
+    `;
+
+    listContainer.appendChild(row);
+  });
+
+  // ✅ בסוף – לצייר את 5 האחרונים שלי (בלי סיכון קריסה)
+  renderMyLast5Games(safeGetRecentGameHistory, safeGetCurrentUser);
 });
+
+
+// מקבלת את פונקציות ה-safe כדי שלא תפיל את הדף אם משהו חסר
+function renderMyLast5Games(safeGetRecentGameHistory, safeGetCurrentUser) {
+  const box = document.getElementById("myHistoryList");
+  if (!box) return;
+
+  const me = safeGetCurrentUser ? safeGetCurrentUser() : null;
+  if (!me) {
+    box.innerHTML = "<p>Please log in to see your history.</p>";
+    return;
+  }
+
+  const history = safeGetRecentGameHistory ? safeGetRecentGameHistory(100) : [];
+  const rows = Array.isArray(history)
+    ? history.filter(r => r && r.username === me).slice(0, 5)
+    : [];
+
+  if (!rows.length) {
+    box.innerHTML = "<p>No recent games yet 🎮</p>";
+    return;
+  }
+
+  box.innerHTML = rows.map(r => {
+    const dt = new Date(r.ts || Date.now()).toLocaleString();
+    //const badge = r.win ? "👏 " : "";
+    const game = `${r.game || "Game"}${(r.level != null) ? ` (Lv ${r.level})` : ""}`;
+
+    return `
+      <div class="list-item">
+        <div class="stat-val">${r.win ? "+" : "-"}</div>
+         <div class="player-info">${game}</div>
+        <div class="score-val">${Number(r.score) || 0}</div>
+        <div class="stat-val">${dt}</div>
+      </div>
+    `;
+  }).join("");
+
+}

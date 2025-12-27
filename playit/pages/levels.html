@@ -92,6 +92,11 @@
 
     <script src="../js/storage.js"></script>
     <script>
+        const username = getCurrentUser();
+        if (!username) {
+        location.href = "../auth/login.html";
+        }
+
         // יצירת המפה דינמית
         const levelsGrid = document.getElementById("levelsGrid");
         const progress = getUserProgress("trivia"); // פונקציה חדשה מ-storage.js

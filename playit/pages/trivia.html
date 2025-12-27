@@ -1,108 +1,57 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayIT | טריוויה</title>
-    <link rel="stylesheet" href="../css/games.css">
-    <link rel="stylesheet" href="../css/trivia.css">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        /* תיקון מיקום כפתור יציאה - לצד שמאל כדי לא להתנגש עם השלב */
-        .top-exit-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px; /* צד שמאל */
-            background: rgba(255, 255, 255, 0.15);
-            padding: 8px 15px;
-            border-radius: 20px;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: 0.3s;
-            z-index: 1000;
-        }
-        .top-exit-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayIT | Trivia</title>
 
-        /* סידור כפתורים במסך סיום */
-        .end-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-            width: 100%;
-            align-items: center;
-        }
-        
-        /* עיצוב אחיד לכפתורים */
-        .end-buttons button {
-            width: 200px;
-            padding: 10px;
-            border-radius: 30px;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            transition: 0.2s;
-        }
-
-        .restart-btn { background: #00eaff; color: #0a1a3d; font-weight: bold; }
-        .restart-btn:hover { box-shadow: 0 0 15px #00eaff; }
-
-        .map-btn { background: #00ff88; color: #0a1a3d; font-weight: bold; display: none; } /* מוסתר כברירת מחדל */
-        .map-btn:hover { box-shadow: 0 0 15px #00ff88; }
-
-        .menu-btn { background: transparent; border: 2px solid rgba(255,255,255,0.5) !important; color: white; }
-        .menu-btn:hover { background: rgba(255,255,255,0.1); border-color: white !important; }
-
-    </style>
+  <link rel="stylesheet" href="../css/games.css" />
+  <link rel="stylesheet" href="../css/trivia.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet" />
 </head>
+
 <body>
+  <a href="levels.html" class="top-exit-btn">✖ Back to Map</a>
 
-    <a href="levels.html" class="top-exit-btn">✖ חזרה למפה</a>
+  <div class="game-container">
+    <header class="game-header">
+      <div class="score-box">Score: <span id="score">0</span></div>
+      <div class="timer-box">Time: <span id="timer">30</span></div>
+    </header>
 
-    <div class="game-container">
-        <header class="game-header">
-            <div class="score-box">ניקוד: <span id="score">0</span></div>
-            <div class="timer-box">זמן: <span id="timer">30</span></div>
-        </header>
+    <div id="gameArea" class="game-area">
+      <div class="question-card">
+        <h2 id="questionText">Loading question...</h2>
+      </div>
 
-        <div id="gameArea" class="game-area">
-            <div class="question-card">
-                <h2 id="questionText">השאלה נטענת...</h2>
-            </div>
-            
-            <div class="answers-grid" id="answersContainer">
-                </div>
-            
-            <p id="feedback" class="feedback"></p>
-        </div>
+      <div class="answers-grid" id="answersContainer"></div>
 
-        <div class="lifelines">
-            <button id="btn5050" class="lifeline-btn" onclick="use5050()">🌓 50/50</button>
-            <button id="btnTime" class="lifeline-btn" onclick="addTime()">⏳ +15s</button>
-        </div>
-
-        <div id="endScreen" class="end-screen hidden">
-            <h2 id="endMsg">המשחק נגמר!</h2>
-            <div id="starDisplay" style="font-size: 40px; margin: 10px 0;"></div>
-            <p>הניקוד שלך: <span id="finalScore">0</span></p>
-            
-            <div class="end-buttons">
-                <button onclick="startGame()" class="restart-btn">שחק שוב</button>
-                
-                <button id="nextLevelBtn" class="map-btn">למפה 🗺️</button>
-                
-                <button onclick="location.href='games.html'" class="menu-btn">חזור לתפריט</button>
-            </div>
-        </div>
+      <p id="feedback" class="feedback"></p>
     </div>
 
-    <script src="../js/storage.js"></script>
-    <script src="../js/trivia.js"></script>
+    <div class="lifelines">
+      <button id="btn5050" class="lifeline-btn" onclick="use5050()">50/50</button>
+      <button id="btnTime" class="lifeline-btn" onclick="addTime()">+15s</button>
+    </div>
+
+    <div id="endScreen" class="end-screen hidden">
+      <h2 id="endMsg">Game over!</h2>
+      <div id="starDisplay" style="font-size: 40px; margin: 10px 0;"></div>
+
+      <p>Your score: <span id="finalScore">0</span></p>
+
+      <div class="end-buttons">
+        <button onclick="startGame()" class="restart-btn">Play Again</button>
+
+        <button id="nextLevelBtn" class="map-btn">Go to Map</button>
+
+        <button onclick="location.href='games.html'" class="menu-btn">Back to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/storage.js"></script>
+  <script src="../js/audio.js"></script>
+  <script src="../js/trivia.js"></script>
 </body>
 </html>

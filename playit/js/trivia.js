@@ -1,247 +1,332 @@
 /* js/trivia.js */
 
-/* בדיקת התחברות */
-const currentUser = getCurrentUser();
-if (!currentUser) location.href = "../auth/login.html";
+/* Login check */
+//const currentUser = requireAuth("../auth/login.html", "auth/login.html");
+//if (!currentUser) retu;
+const username = getCurrentUser();
+if (!username) {
+  location.href = "../auth/login.html";
+}
 
-/* --- מאגר שאלות מחולק לשלבים --- */
+/* --- Question bank by levels --- */
 const allQuestions = {
-    1: [ // שלב 1
-        { q: "מי כתב את 'הארי פוטר'?", a: ["טולקין", "רולינג", "קינג", "מרטין"], correct: 1 },
-        { q: "מהי בירת צרפת?", a: ["לונדון", "ברלין", "פריז", "רומא"], correct: 2 },
-        { q: "איזה צבע מתקבל מערבוב כחול וצהוב?", a: ["ירוק", "סגול", "כתום", "חום"], correct: 0 },
-        { q: "כמה רגליים יש לעכביש?", a: ["6", "8", "4", "10"], correct: 1 }
-    ],
-    2: [ // שלב 2
-        { q: "איזה יסוד כימי מסומן באות O?", a: ["זהב", "חמצן", "כסף", "ברזל"], correct: 1 },
-        { q: "באיזו שנה הוקמה המדינה?", a: ["1945", "1967", "1948", "1950"], correct: 2 },
-        { q: "מהו כוכב הלכת הגדול ביותר?", a: ["צדק", "שבתאי", "ארץ", "מאדים"], correct: 0 },
-        { q: "כמה ימים בשנה מעוברת?", a: ["365", "366", "360", "364"], correct: 1 }
-    ],
-    3: [ // שלב 3
-        { q: "מי צייר את המונה ליזה?", a: ["ואן גוך", "פיקאסו", "דה וינצ'י", "רמברנדט"], correct: 2 },
-        { q: "מהי היבשת הגדולה ביותר?", a: ["אפריקה", "אירופה", "אמריקה", "אסיה"], correct: 3 },
-        { q: "איזו חיה היא המהירה ביותר ביבשה?", a: ["אריה", "צ'יטה", "נמר", "סוס"], correct: 1 },
-        { q: "כמה שניות יש בשעה?", a: ["3600", "60", "1000", "2400"], correct: 0 }
-    ],
-    4: [ // שלב 4
-        { q: "מהי בירת יפן?", a: ["בייג'ינג", "סיאול", "טוקיו", "בנגקוק"], correct: 2 },
-        { q: "איזה איבר בגוף מייצר אינסולין?", a: ["כבד", "לבלב", "כליות", "לב"], correct: 1 }
-    ],
-    5: [ // שלב 5
-        { q: "מי היה ראש הממשלה הראשון?", a: ["בגין", "בן גוריון", "רבין", "שרון"], correct: 1 }
-    ]
+  1: [
+    { q: "Who wrote 'Harry Potter'?", a: ["Tolkien", "Rowling", "King", "Martin"], correct: 1 },
+    { q: "What is the capital of France?", a: ["London", "Berlin", "Paris", "Rome"], correct: 2 },
+    { q: "What color do you get by mixing blue and yellow?", a: ["Green", "Purple", "Orange", "Brown"], correct: 0 },
+    { q: "How many legs does a spider have?", a: ["6", "8", "4", "10"], correct: 1 }
+  ],
+  2: [
+    { q: "Which chemical element is represented by the letter O?", a: ["Gold", "Oxygen", "Silver", "Iron"], correct: 1 },
+    { q: "In which year was the country founded?", a: ["1945", "1967", "1948", "1950"], correct: 2 },
+    { q: "Which is the largest planet?", a: ["Jupiter", "Saturn", "Earth", "Mars"], correct: 0 },
+    { q: "How many days are in a leap year?", a: ["365", "366", "360", "364"], correct: 1 }
+  ],
+  3: [
+    { q: "Who painted the Mona Lisa?", a: ["Van Gogh", "Picasso", "Da Vinci", "Rembrandt"], correct: 2 },
+    { q: "What is the largest continent?", a: ["Africa", "Europe", "America", "Asia"], correct: 3 },
+    { q: "Which land animal is the fastest?", a: ["Lion", "Cheetah", "Tiger", "Horse"], correct: 1 },
+    { q: "How many seconds are in an hour?", a: ["3600", "60", "1000", "2400"], correct: 0 }
+  ],
+  4: [
+    { q: "What is the capital of Japan?", a: ["Beijing", "Seoul", "Tokyo", "Bangkok"], correct: 2 },
+    { q: "Which organ produces insulin?", a: ["Liver", "Pancreas", "Kidneys", "Heart"], correct: 1 }
+  ],
+  5: [
+    { q: "Who was the first Prime Minister?", a: ["Begin", "Ben-Gurion", "Rabin", "Sharon"], correct: 1 }
+  ]
 };
 
-/* --- לוגיקת משחק --- */
+/* --- Game setup --- */
 const urlParams = new URLSearchParams(window.location.search);
-const currentLevel = parseInt(urlParams.get('level')) || 1;
+const currentLevel = parseInt(urlParams.get("level"), 10) || 1;
 const questions = allQuestions[currentLevel] || allQuestions[1];
 
+/* --- State --- */
 let currentQIndex = 0;
 let score = 0;
-let correctCount = 0; // <-- משתנה חדש לספירת תשובות נכונות
-let timerInterval;
+let correctCount = 0;
+let timerInterval = null;
 let timeLeft = 30;
 let isAnswering = false;
 
-// משתנים לגלגלי עזרה
+/* Help-wheel state */
 let used5050 = false;
 let usedTime = false;
 
-/* אלמנטים */
+/* Help costs (change as you like) */
+const COST_5050 = 20;
+const COST_TIME = 10;
+
+/* --- Elements --- */
 const questionEl = document.getElementById("questionText");
 const answersDiv = document.getElementById("answersContainer");
 const scoreEl = document.getElementById("score");
 const timerEl = document.getElementById("timer");
 const endScreen = document.getElementById("endScreen");
 
-// עדכון כותרת השלב
+/* Level indicator (center, no overlap) */
 const headerTitle = document.querySelector(".game-header");
-if(headerTitle) {
-    const existingLevelInd = document.getElementById("levelIndicator");
-    if(!existingLevelInd) {
-        headerTitle.insertAdjacentHTML('afterbegin', `<div id="levelIndicator" style="position:absolute; top:15px; right:20px; color:#00eaff; font-weight:bold;">שלב ${currentLevel}</div>`);
-    }
+if (headerTitle && !document.getElementById("levelIndicator")) {
+  const levelEl = document.createElement("div");
+  levelEl.id = "levelIndicator";
+  levelEl.className = "level-box";
+  levelEl.textContent = `Level ${currentLevel}`;
+
+  // Put it between score and timer
+  headerTitle.insertBefore(levelEl, headerTitle.lastElementChild);
 }
 
-/* התחלה */
-function startGame() {
-    currentQIndex = 0;
-    score = 0;
-    correctCount = 0; // <-- איפוס המונה
-    timeLeft = 30;
-    isAnswering = false;
-    
-    // איפוס גלגלי עזרה
-    used5050 = false;
-    usedTime = false;
-    const btn5050 = document.getElementById("btn5050");
-    const btnTime = document.getElementById("btnTime");
-    if(btn5050) { btn5050.disabled = false; btn5050.style.opacity = "1"; }
-    if(btnTime) { btnTime.disabled = false; btnTime.style.opacity = "1"; }
 
-    if(scoreEl) scoreEl.textContent = 0;
-    if(endScreen) endScreen.classList.add("hidden");
-    
-    startTimer();
-    loadQuestion();
+/* --- UI helpers --- */
+function updateScoreUI() {
+  if (scoreEl) scoreEl.textContent = score;
+}
+
+function updateTimerUI() {
+  if (!timerEl) return;
+
+  timerEl.textContent = timeLeft;
+
+  if (timeLeft <= 5) timerEl.style.color = "#ff4d4d";
+  else timerEl.style.color = "white";
+}
+
+/**
+ * Deduct points for help usage.
+ * Returns true if deduction succeeded.
+ * Prevents score from going below 0 by default.
+ */
+function spendPoints(cost) {
+  if (score < cost) {
+    alert("Not enough points to use this help.");
+    return false;
+  }
+  score -= cost;
+  updateScoreUI();
+  return true;
+}
+
+/* --- Start --- */
+function startGame() {
+  currentQIndex = 0;
+  score = 0;
+  correctCount = 0;
+  timeLeft = 30;
+  isAnswering = false;
+
+  used5050 = false;
+  usedTime = false;
+
+  const btn5050 = document.getElementById("btn5050");
+  const btnTime = document.getElementById("btnTime");
+  if (btn5050) {
+    btn5050.disabled = false;
+    btn5050.style.opacity = "1";
+  }
+  if (btnTime) {
+    btnTime.disabled = false;
+    btnTime.style.opacity = "1";
+  }
+
+  updateScoreUI();
+  if (endScreen) endScreen.classList.add("hidden");
+
+  startTimer();
+  loadQuestion();
 }
 
 function startTimer() {
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        if(timerEl) {
-            timerEl.textContent = timeLeft;
-            if (timeLeft <= 5) timerEl.style.color = "#ff4d4d";
-            else timerEl.style.color = "white";
-        }
+  clearInterval(timerInterval);
 
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            endGame(false); 
-        }
-    }, 1000);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      endGame(false);
+    }
+  }, 1000);
 }
 
 function loadQuestion() {
-    const qData = questions[currentQIndex];
-    if(questionEl) questionEl.textContent = qData.q;
-    if(answersDiv) answersDiv.innerHTML = "";
+  const qData = questions[currentQIndex];
+  if (!qData) return;
 
-    qData.a.forEach((ans, index) => {
-        const btn = document.createElement("button");
-        btn.textContent = ans;
-        btn.className = "answer-btn";
-        btn.onclick = () => checkAnswer(index, qData.correct, btn);
-        answersDiv.appendChild(btn);
-    });
+  if (questionEl) questionEl.textContent = qData.q;
+  if (answersDiv) answersDiv.innerHTML = "";
+
+  qData.a.forEach((ans, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = ans;
+    btn.className = "answer-btn";
+    btn.onclick = () => checkAnswer(index, qData.correct, btn);
+    answersDiv.appendChild(btn);
+  });
 }
 
-/* --- גלגלי עזרה --- */
+/* --- Help wheels --- */
+/* NOTE: your HTML uses onclick="use5050()" and onclick="addTime()" */
 function use5050() {
-    if (used5050 || isAnswering) return;
-    used5050 = true;
-    const btn = document.getElementById("btn5050");
-    if(btn) { btn.disabled = true; btn.style.opacity = "0.5"; }
+  if (used5050 || isAnswering) return;
 
-    const correct = questions[currentQIndex].correct;
-    const allBtns = document.querySelectorAll(".answer-btn");
-    let removed = 0;
+  // Deduct score FIRST
+  if (!spendPoints(COST_5050)) return;
 
-    allBtns.forEach((b, idx) => {
-        if (idx !== correct && removed < 2) {
-            b.style.visibility = "hidden";
-            removed++;
-        }
-    });
+  used5050 = true;
+  const btn = document.getElementById("btn5050");
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+  }
+
+  const correct = questions[currentQIndex].correct;
+  const allBtns = document.querySelectorAll(".answer-btn");
+  let removed = 0;
+
+  allBtns.forEach((b, idx) => {
+    if (idx !== correct && removed < 2) {
+      b.style.visibility = "hidden";
+      removed++;
+    }
+  });
 }
 
 function addTime() {
-    if (usedTime || isAnswering) return;
-    usedTime = true;
-    const btn = document.getElementById("btnTime");
-    if(btn) { btn.disabled = true; btn.style.opacity = "0.5"; }
+  if (usedTime || isAnswering) return;
 
-    timeLeft += 15;
-    if(timerEl) {
-        timerEl.textContent = timeLeft;
-        timerEl.style.color = "#00ff00";
-        setTimeout(()=> timerEl.style.color = "white", 500);
-    }
-}
+  // Deduct score FIRST
+  if (!spendPoints(COST_TIME)) return;
 
-/* --- בדיקת תשובה --- */
-function checkAnswer(selectedIndex, correctIndex, btnElement) {
-    if (isAnswering) return;
-    isAnswering = true;
+  usedTime = true;
+  const btn = document.getElementById("btnTime");
+  if (btn) {
+    btn.disabled = true;
+    btn.style.opacity = "0.5";
+  }
 
-    // האם זו השאלה האחרונה?
-    const isLastQuestion = currentQIndex === questions.length - 1;
-    if (isLastQuestion) clearInterval(timerInterval);
-
-    if (selectedIndex === correctIndex) {
-        btnElement.classList.add("correct");
-        score += 10 + Math.max(0, Math.floor(timeLeft / 2));
-        correctCount++; // <-- ספירת תשובה נכונה
-        if(scoreEl) scoreEl.textContent = score;
-        btnElement.innerHTML += " ✅";
-    } else {
-        btnElement.classList.add("wrong");
-        const allBtns = document.querySelectorAll(".answer-btn");
-        if(allBtns[correctIndex]) allBtns[correctIndex].classList.add("correct");
-    }
-
+  timeLeft += 15;
+  if (timerEl) {
+    timerEl.textContent = timeLeft;
+    timerEl.style.color = "#00ff00";
     setTimeout(() => {
-        currentQIndex++;
-        if (currentQIndex < questions.length) {
-            isAnswering = false;
-            loadQuestion();
-        } else {
-            endGame(true);
-        }
-    }, 1500);
+      if (timerEl) timerEl.style.color = "white";
+    }, 500);
+  }
 }
 
-/* --- סיום משחק --- */
-function endGame(finishedQuestions) {
-    clearInterval(timerInterval);
-    
-    // 1. חישוב תנאי המעבר: יותר מ-50% תשובות נכונות
-    const passingThreshold = questions.length / 2; // למשל ב-4 שאלות, צריך יותר מ-2 (כלומר 3 ומעלה)
-    const isWin = correctCount > passingThreshold;
+/* --- Answer check --- */
+function checkAnswer(selectedIndex, correctIndex, btnElement) {
+  if (isAnswering) return;
+  isAnswering = true;
 
-    let stars = 0;
-    const finalScoreEl = document.getElementById("finalScore");
-    const endMsgEl = document.getElementById("endMsg");
-    const starDisplayEl = document.getElementById("starDisplay");
-    const nextLevelBtn = document.getElementById("nextLevelBtn");
+  const isLastQuestion = currentQIndex === questions.length - 1;
+  if (isLastQuestion) clearInterval(timerInterval);
 
-    if (isWin) {
-        // --- ניצחון: חישוב כוכבים ---
-        const maxPossibleScore = questions.length * 25; 
-        if (score > maxPossibleScore * 0.8) stars = 3;
-        else if (score > maxPossibleScore * 0.5) stars = 2;
-        else stars = 1;
+  if (selectedIndex === correctIndex) {
+    btnElement.classList.add("correct");
+    score += 10 + Math.max(0, Math.floor(timeLeft / 2));
+    correctCount++;
+    updateScoreUI();
+    btnElement.innerHTML += " ✅";
+  } else {
+    btnElement.classList.add("wrong");
+    const allBtns = document.querySelectorAll(".answer-btn");
+    if (allBtns[correctIndex]) allBtns[correctIndex].classList.add("correct");
+  }
 
-        // שמירת ההתקדמות ב-storage (זה מה שפותח את השלב הבא)
-        completeLevel("trivia", currentLevel, stars);
-
-        // עדכון UI לניצחון
-        if(starDisplayEl) starDisplayEl.innerHTML = "⭐".repeat(stars);
-        if(endMsgEl) {
-            endMsgEl.textContent = "כל הכבוד! עברת שלב!";
-            endMsgEl.style.color = "#00eaff";
-        }
-        if(nextLevelBtn) {
-            nextLevelBtn.style.display = "inline-block";
-            nextLevelBtn.onclick = () => location.href = "levels.html";
-        }
-
+  setTimeout(() => {
+    currentQIndex++;
+    if (currentQIndex < questions.length) {
+      isAnswering = false;
+      loadQuestion();
     } else {
-        // --- כישלון: לא ענה מספיק נכון ---
-        // לא שומרים כוכבים (נשאר 0 או הכמות הקודמת שהייתה)
-        // השלב הבא לא ייפתח ב-storage.js כי לא קראנו ל-completeLevel או ששלחנו 0
-
-        if(starDisplayEl) starDisplayEl.innerHTML = "❌";
-        if(endMsgEl) {
-            // הודעה מפורטת למה נכשל
-            endMsgEl.textContent = `לא עברת...\nצדקת ב-${correctCount} מתוך ${questions.length} שאלות`;
-            endMsgEl.style.color = "#ff4d4d";
-            endMsgEl.style.whiteSpace = "pre-wrap"; // מאפשר ירידת שורה
-        }
-        // הסתרת הכפתור למפה/שלב הבא
-        if(nextLevelBtn) nextLevelBtn.style.display = "none";
+      endGame(true);
     }
-
-    if(finalScoreEl) finalScoreEl.textContent = score;
-    if(endScreen) endScreen.classList.remove("hidden");
+  }, 1500);
 }
 
-function goToNextLevel() {
-    location.href = `levels.html`;
+/* --- Game end --- */
+function endGame(finishedQuestions) {
+  clearInterval(timerInterval);
+
+  const passingThreshold = questions.length / 2;
+  const isWin = correctCount > passingThreshold;
+
+  let stars = 0;
+
+  const finalScoreEl = document.getElementById("finalScore");
+  const endMsgEl = document.getElementById("endMsg");
+  const starDisplayEl = document.getElementById("starDisplay");
+  const nextLevelBtn = document.getElementById("nextLevelBtn");
+
+  if (isWin) {
+    const maxPossibleScore = questions.length * 25;
+    if (score > maxPossibleScore * 0.8) stars = 3;
+    else if (score > maxPossibleScore * 0.5) stars = 2;
+    else stars = 1;
+
+    completeLevel("trivia", currentLevel, stars);
+
+    if (starDisplayEl) starDisplayEl.innerHTML = "⭐".repeat(stars);
+    if (endMsgEl) {
+      endMsgEl.textContent = "Well done! You passed the level!";
+      endMsgEl.style.color = "#00eaff";
+    }
+    if (nextLevelBtn) {
+      nextLevelBtn.style.display = "inline-block";
+      nextLevelBtn.onclick = () => (location.href = "levels.html");
+    }
+  } else {
+    if (starDisplayEl) starDisplayEl.innerHTML = "❌";
+    if (endMsgEl) {
+      endMsgEl.textContent = `You did not pass...\nYou got ${correctCount} out of ${questions.length} correct`;
+      endMsgEl.style.color = "#ff4d4d";
+      endMsgEl.style.whiteSpace = "pre-wrap";
+    }
+    if (nextLevelBtn) nextLevelBtn.style.display = "none";
+  }
+
+  if (finalScoreEl) finalScoreEl.textContent = score;
+  if (endScreen) endScreen.classList.remove("hidden");
+
+  playSfx(isWin ? "win" : "lose");
+
+  saveTriviaStats(score, isWin);
+
+  addGameHistoryEntry({
+  username: getCurrentUser(),
+  game: "Trivia",
+  score: score,
+  win: isWin,
+  level: currentLevel,
+  stars: stars,
+  ts: Date.now()
+});
+
 }
 
-// התחלה אוטומטית
+function saveTriviaStats(finalScore, didWin) {
+  const users = loadUsers();
+  const username = getCurrentUser();
+  const user = users.find((u) => u.username === username);
+  if (!user) return;
+
+  if (!user.stats) user.stats = {};
+  if (!user.stats.trivia) user.stats.trivia = { plays: 0, bestScore: 0 };
+
+  user.stats.trivia.plays += 1;
+
+  if (finalScore > (user.stats.trivia.bestScore || 0)) {
+    user.stats.trivia.bestScore = finalScore;
+  }
+
+  user.stats.trivia.wins = user.stats.trivia.wins || 0;
+  if (didWin) user.stats.trivia.wins += 1;
+
+  saveUsers(users);
+}
+
+/* Auto start */
 startGame();
