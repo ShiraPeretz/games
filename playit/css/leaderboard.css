@@ -145,7 +145,7 @@ header { text-align: center; margin-bottom: 10px; }
 .place-2 .podium-avatar { border-color: #e2e8f0; }
 
 .place-3 { order: 3; }
-.place-3 .podium-rank { height: 120px; background: linear-gradient(180deg, #fbbf24 0%, #cd7f32 100%); }
+.place-3 .podium-rank { height: 120px;     background: linear-gradient(180deg, #b28354 0%, #6c3702 100%); }
 .place-3 .podium-avatar { border-color: #cd7f32; }
 
 /* === רשימה (מקום 4 ומטה) === */

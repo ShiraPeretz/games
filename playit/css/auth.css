@@ -15,9 +15,12 @@ body {
     align-items: center;
     justify-content: center;
     /* תבנית רקע עדינה ברקע */
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(0, 242, 255, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(189, 0, 255, 0.15) 0px, transparent 50%);
+     /* background:
+        radial-gradient(circle at top left, #2a3cff 0%, transparent 45%),
+        radial-gradient(circle at bottom right, #c77dff 0%, transparent 45%),
+        linear-gradient(135deg, #0e1338, #1a3752); */
+            background: linear-gradient(90deg, #0b4fcf, #7b5ce6, #c77dff);
+
 }
 
 .auth-wrapper {

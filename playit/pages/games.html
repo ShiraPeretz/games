@@ -5,43 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PlayIT | משחקים</title>
     <link rel="stylesheet" href="../css/games.css">
+    <link rel="stylesheet"
+     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        /* כפתור מעבר לטבלת המובילים בפרופיל */
-        .btn-leaderboard {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            margin-top: 20px;
-            padding: 12px;
-            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-            color: #1a1a1a;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-sizing: border-box; /* חשוב כדי שלא יחרוג מהמסגרת */
-        }
-
-        .btn-leaderboard:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
-        }
-    </style>
+  
 </head>
 
 <body>
 
 <header class="top-header">
     <img src="../img/logo.png" class="small-logo" alt="logo">
+<nav class="categories-bar">
+    <button class="cat-btn active">הכל</button>
+    <button class="cat-btn">חשיבה</button>
+    <button class="cat-btn">תנועה</button>
+    <button class="cat-btn">טריוויה</button>
+    <button class="cat-btn">רפלקסים</button>
+</nav>
+
     <div class="user-box">
-        <span id="currentUser"></span>
-        <button id="profileBtn" class="profile-btn">פרופיל</button>
-        <button id="logoutBtn">התנתקות</button>
-    </div>
+    <span id="currentUser"></span>
+
+    <button id="profileBtn" class="icon-btn" title="פרופיל">
+        <i class="fa-solid fa-user"></i>
+    </button>
+
+    <button id="logoutBtn" class="icon-btn logout" title="התנתקות">
+        <i class="fa-solid fa-right-from-bracket"></i>
+    </button>
+</div>
+
 </header>
 
 <div id="profileModal" class="modal">
@@ -89,8 +82,8 @@
 </div>
 
 <section class="games-section">
-    <h2>ברוכה הבאה ל־PlayIT!</h2>
-    <p>בחרי משחק כדי להתחיל</p>
+    <h2>ברוך הבא ל־PlayIT!</h2>
+    <p>בחר משחק כדי להתחיל</p>
 
     <div class="games-grid" id="gamesContainer"></div>
     </section>
