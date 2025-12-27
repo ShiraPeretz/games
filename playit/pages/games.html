@@ -1,92 +1,100 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PlayIT | משחקים</title>
+    <title>PlayIT | Games</title>
     <link rel="stylesheet" href="../css/games.css">
     <link rel="stylesheet"
      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
-  
 </head>
 
 <body>
 
 <header class="top-header">
     <img src="../img/logo.png" class="small-logo" alt="logo">
-<nav class="categories-bar">
-    <button class="cat-btn active">הכל</button>
-    <button class="cat-btn">חשיבה</button>
-    <button class="cat-btn">תנועה</button>
-    <button class="cat-btn">טריוויה</button>
-    <button class="cat-btn">רפלקסים</button>
-</nav>
+
+    <nav class="categories-bar">
+        <button class="cat-btn active">All</button>
+        <button class="cat-btn">Thinking</button>
+        <button class="cat-btn">Movement</button>
+        <button class="cat-btn">Trivia</button>
+        <button class="cat-btn">Reflexes</button>
+    </nav>
 
     <div class="user-box">
-    <span id="currentUser"></span>
+        <span id="currentUser"></span>
 
-    <button id="profileBtn" class="icon-btn" title="פרופיל">
-        <i class="fa-solid fa-user"></i>
-    </button>
+        <button id="profileBtn" class="icon-btn" title="Profile">
+            <i class="fa-solid fa-user"></i>
+        </button>
 
-    <button id="logoutBtn" class="icon-btn logout" title="התנתקות">
-        <i class="fa-solid fa-right-from-bracket"></i>
-    </button>
-</div>
+       <button id="leaderboardBtn"
+                class="icon-btn"
+                title="Leaderboard"
+                onclick="location.href='leaderboard.html'">
+            <i class="fa-solid fa-trophy"></i>
+        </button>
 
+
+        <button id="logoutBtn" class="icon-btn logout" title="Logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+    </div>
 </header>
 
 <div id="profileModal" class="modal">
     <div class="modal-content">
         <span id="closeProfile" class="close-btn">&times;</span>
 
-        <h2>פרופיל משתמש</h2>
+        <h2>User Profile</h2>
 
         <div class="profile-section">
-            <strong>שם מלא:</strong> <span id="profFullName"></span>
+            <strong>Full Name:</strong> <span id="profFullName"></span>
         </div>
 
         <div class="profile-section">
-            <strong>שם משתמש:</strong> <span id="profUsername"></span>
+            <strong>Username:</strong> <span id="profUsername"></span>
         </div>
 
         <div class="profile-section">
-            <strong>נרשם בתאריך:</strong> <span id="profCreated"></span>
+            <strong>Registered On:</strong> <span id="profCreated"></span>
         </div>
 
         <hr>
 
-        <h3>נתוני משחק</h3>
+        <h3>Game Data</h3>
 
         <div class="profile-section">
-            <strong>טריוויה:</strong>
+            <strong>Trivia:</strong>
             <span id="profTriviaStats"></span>
         </div>
 
         <div class="profile-section">
-            <strong>תפיסת מטבעות:</strong>
+            <strong>Coin Catcher:</strong>
             <span id="profCatcherStats"></span>
         </div>
 
         <hr>
 
-        <h3>הישגים</h3>
+        <h3>Achievements</h3>
         <ul id="profAchievements"></ul>
 
         <a href="leaderboard.html" class="btn-leaderboard">
-            🏆 לרשימת המובילים
+            🏆 Leaderboard
         </a>
-
     </div>
 </div>
 
+
+
 <section class="games-section">
-    <h2>ברוך הבא ל־PlayIT!</h2>
-    <p>בחר משחק כדי להתחיל</p>
+    <h2>Welcome to PlayIT!</h2>
+    <p>Select a game to start</p>
 
     <div class="games-grid" id="gamesContainer"></div>
-    </section>
+</section>
 
 <script src="../js/storage.js"></script>
 <script src="../js/games.js"></script>
