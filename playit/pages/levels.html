@@ -5,77 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlayIT | Choose Level</title>
   <link rel="stylesheet" href="../css/games.css">
+  <link rel="stylesheet" href="../css/level.css" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
-  <style>
-    /* Map-specific styling – can be moved to a separate CSS file */
-    .levels-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding-top: 50px;
-    }
-
-    .level-card {
-      width: 200px;
-      height: 250px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: 0.3s;
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    /* Unlocked level */
-    .level-card.unlocked:hover {
-      transform: translateY(-10px);
-      background: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 30px rgba(0, 234, 255, 0.4);
-      border-color: #00eaff;
-    }
-
-    /* Locked level */
-    .level-card.locked {
-      opacity: 0.6;
-      cursor: not-allowed;
-      filter: grayscale(1);
-    }
-
-    .level-num {
-      font-size: 60px;
-      font-weight: bold;
-      color: #fff;
-      margin-bottom: 10px;
-      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .level-stars {
-      font-size: 24px;
-      color: #ffd700; /* Gold */
-      height: 30px;
-    }
-
-    .lock-icon {
-      font-size: 50px;
-      margin-bottom: 10px;
-    }
-
-    .level-title {
-      font-size: 18px;
-      margin-top: 10px;
-      opacity: 0.8;
-    }
-  </style>
 </head>
 
 <body>
@@ -90,44 +21,6 @@
   </div>
 
   <script src="../js/storage.js"></script>
-  <script>
-    const username = getCurrentUser();
-    if (!username) {
-      location.href = "../auth/login.html";
-    }
-
-    // Build the map dynamically
-    const levelsGrid = document.getElementById("levelsGrid");
-    const progress = getUserProgress("trivia"); // New function from storage.js
-
-    // Define level names (can add more)
-    const levelNames = ["Beginners", "Advanced", "Experts", "Geniuses", "The Final Boss"];
-
-    for (let i = 1; i <= 5; i++) {
-      const isUnlocked = i <= progress.maxLevel;
-      const stars = progress.levels[i] || 0;
-      const starString = "⭐".repeat(stars) + "☆".repeat(3 - stars); // Always shows 3 stars
-
-      const card = document.createElement("div");
-      card.className = "level-card " + (isUnlocked ? "unlocked" : "locked");
-
-      if (isUnlocked) {
-        card.innerHTML =
-          '<div class="level-num">' + i + '</div>' +
-          '<div class="level-stars">' + starString + '</div>' +
-          '<div class="level-title">' + levelNames[i - 1] + '</div>';
-
-        card.onclick = function () {
-          location.href = "trivia.html?level=" + i;
-        };
-      } else {
-        card.innerHTML =
-          '<div class="lock-icon">🔒</div>' +
-          '<div class="level-title">Locked</div>';
-      }
-
-      levelsGrid.appendChild(card);
-    }
-  </script>
+  <script src="../js/level.js"></script>
 </body>
 </html>

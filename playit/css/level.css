@@ -1,0 +1,69 @@
+ 
+    /* Map-specific styling – can be moved to a separate CSS file */
+    .levels-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-top: 50px;
+    }
+
+    .level-card {
+      width: 200px;
+      height: 250px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    /* Unlocked level */
+    .level-card.unlocked:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0, 234, 255, 0.4);
+      border-color: #00eaff;
+    }
+
+    /* Locked level */
+    .level-card.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    .level-num {
+      font-size: 60px;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .level-stars {
+      font-size: 24px;
+      color: #ffd700; /* Gold */
+      height: 30px;
+    }
+
+    .lock-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    .level-title {
+      font-size: 18px;
+      margin-top: 10px;
+      opacity: 0.8;
+    }
