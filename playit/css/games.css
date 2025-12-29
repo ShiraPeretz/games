@@ -1,4 +1,4 @@
-/* ===== משתנים ועיצוב בסיסי ===== */
+/* ===== Variables & Base Styling ===== */
 :root {
     --bg-dark: #0b1120;
     --bg-card: rgba(30, 41, 59, 0.7);
@@ -20,7 +20,7 @@ body {
 }
 
 
-/* ===== TOP NAV (הבר העליון) ===== */
+/* ===== TOP NAV (Top Navigation Bar) ===== */
 .top-header {
     position: sticky;
     top: 0;
@@ -34,6 +34,7 @@ body {
     backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255,255,255,0.08);
 }
+
 .categories-bar {
     display: flex;
     gap: 10px;
@@ -59,10 +60,9 @@ body {
     font-weight: 700;
 }
 
-
 .nav-left { display: flex; align-items: center; gap: 20px; }
 
-/* לוגו קטן בבר העליון */
+/* Small logo in the top bar */
 .top-header img {
     max-height: 50px; 
     width: auto;
@@ -93,9 +93,9 @@ body {
     color: white;
 }
 
-/* ===== כותרת ראשית (מעוצבת מחדש) ===== */
+/* ===== Main Title (Redesigned) ===== */
 .games-section {
-    text-align: center; /* ממרכז את הטקסט */
+    text-align: center; /* Centers the text */
     padding: 40px 20px 10px;
     display: flex;
     flex-direction: column;
@@ -116,22 +116,22 @@ body {
 }
 
 
-/* ===== גריד המשחקים (5 בשורה) ===== */
+/* ===== Games Grid (5 per row) ===== */
 .games-grid {
     display: grid;
-    /* שינוי קריטי: הקטנו את המינימום ל-220px 
-       כדי שיכנסו יותר כרטיסים בשורה אחת 
+    /* Critical change: reduced minimum width to 220px
+       so more cards fit in a single row
     */
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 25px;
     
-    /* הרחבנו את הרוחב המקסימלי כדי שיהיה מקום ל-5 כרטיסים */
+    /* Increased max width to allow space for 5 cards */
     max-width: 90%; 
     margin: 40px auto;
     padding: 20px;
 }
 
-/* ===== כרטיסי משחק ===== */
+/* ===== Game Cards ===== */
 .game-card {
     background: rgba(255, 255, 255, 0.12);
     border-radius: 18px;
@@ -147,7 +147,7 @@ body {
 }
 
 
-/* פס צבע עליון לכרטיס */
+/* Top color strip on card */
 .game-card::before {
     content: '';
     position: absolute;
@@ -169,7 +169,7 @@ body {
 
 .game-thumb {
     width: 100%;
-    height: 130px; /* גובה אחיד לתמונות */
+    height: 130px; /* Uniform image height */
     object-fit: cover;
     border-radius: 12px;
     margin-bottom: 15px;
@@ -187,7 +187,7 @@ body {
     margin-bottom: 0;
 }
 
-/* כרטיס לא פעיל */
+/* Disabled card */
 .game-card.disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -198,7 +198,7 @@ body {
     box-shadow: none;
 }
 
-/* ===== כפתור פרופיל ===== */
+/* ===== Profile Button ===== */
 .profile-btn {
     background: var(--primary);
     color: black;
@@ -213,21 +213,21 @@ body {
     box-shadow: 0 0 15px var(--primary);
 }
 
-/* ===== מודל פרופיל (חלון קופץ) ===== */
-/* ===== מודל פרופיל (חלון קופץ) - תיקון מרכוז אבסולוטי ===== */
+/* ===== Profile Modal (Popup Window) ===== */
+/* ===== Profile Modal (Popup Window) – Absolute Centering Fix ===== */
 .modal {
-    display: none; /* מוסתר כברירת מחדל */
+    display: none; /* Hidden by default */
     position: fixed;
     z-index: 2000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(15, 23, 42, 0.85); /* רקע כהה */
-    backdrop-filter: blur(5px); /* טשטוש הרקע */
+    background-color: rgba(15, 23, 42, 0.85); /* Dark background */
+    backdrop-filter: blur(5px); /* Background blur */
 }
 
-/* גם אם ה-JS משנה ל-display:block, העיצוב הפנימי יסדר את המיקום */
+/* Even if JS switches to display:block, inner layout handles centering */
 .modal.active {
     display: block; 
 }
@@ -236,35 +236,35 @@ body {
     background: #1e293b;
     border: 1px solid rgba(255, 255, 255, 0.1);
     width: 450px;
-    max-width: 90%; /* למובייל */
+    max-width: 90%; /* Mobile-friendly */
     padding: 40px;
     border-radius: 24px;
     color: white;
     text-align: right;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 
-    /* === הטריק למרכוז שתמיד עובד === */
+    /* === Centering trick that always works === */
     position: absolute;
     top: 50%;
     left: 50%;
-    /* הפקודה הזו מזיזה את החלון בדיוק למרכז שלו ביחס למסך */
+    /* Moves the modal exactly to its center */
     transform: translate(-50%, -50%);
-    margin: 0; /* ביטול שוליים שעלולים להפריע */
+    margin: 0; /* Remove margins that might interfere */
 
-    /* אנימציית כניסה מותאמת למרכוז */
+    /* Entry animation adapted to centered layout */
     animation: popInCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* הגדרת אנימציה שמתחשבת במיקום החדש */
+/* Animation adjusted for the new centered position */
 @keyframes popInCenter {
     from { 
         opacity: 0; 
-        /* מתחיל קצת למעלה וקטן */
+        /* Starts slightly above and smaller */
         transform: translate(-50%, -60%) scale(0.8); 
     }
     to { 
         opacity: 1; 
-        /* מגיע למרכז המדויק בגודל מלא */
+        /* Reaches exact center at full size */
         transform: translate(-50%, -50%) scale(1); 
     }
 }
@@ -320,29 +320,30 @@ body {
     box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
 }
 
- /* כפתור מעבר לטבלת המובילים בפרופיל */
-        .btn-leaderboard {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            margin-top: 20px;
-            padding: 12px;
-            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-            color: #1a1a1a;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-sizing: border-box; /* חשוב כדי שלא יחרוג מהמסגרת */
-        }
+/* Button linking to leaderboard inside profile */
+.btn-leaderboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+    color: #1a1a1a;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-sizing: border-box; /* Important to prevent overflow */
+}
 
-        .btn-leaderboard:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
-        }
+.btn-leaderboard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+}
+
 .icon-btn {
     background: rgba(255,255,255,0.15);
     border: none;
@@ -369,4 +370,10 @@ body {
 
 .icon-btn.logout:hover {
     background: rgba(255, 0, 0, 0.25);
+}
+
+/* Force LTR + left alignment inside profile modal */
+#profileModal .modal-content{
+  direction: ltr;
+  text-align: left;
 }

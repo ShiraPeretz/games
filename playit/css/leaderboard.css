@@ -18,7 +18,6 @@ body.leaderboard-page {
     min-height: 100vh;
     color: var(--text-main);
     
-    /* === תיקון המרכוז האנכי והאופקי === */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,7 +34,6 @@ body.leaderboard-page {
     gap: 20px;
     padding: 20px;
     
-    /* אנימציית כניסה */
     animation: fadeIn 0.8s ease-out;
 }
 
@@ -44,7 +42,6 @@ body.leaderboard-page {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* === כותרת === */
 header { text-align: center; margin-bottom: 10px; }
 
 .lb-title {
@@ -65,14 +62,12 @@ header { text-align: center; margin-bottom: 10px; }
     letter-spacing: 2px;
 }
 
-/* === פודיום (TOP 3) === */
 .podium-container {
     display: flex;
     justify-content: center;
     align-items: flex-end;
     gap: 20px;
     
-    /* גובה קבוע כדי למנוע קריסה כשהוא ריק */
     height: 300px; 
     width: 100%;
     margin-top: 10px;
@@ -148,7 +143,7 @@ header { text-align: center; margin-bottom: 10px; }
 .place-3 .podium-rank { height: 120px;     background: linear-gradient(180deg, #b28354 0%, #6c3702 100%); }
 .place-3 .podium-avatar { border-color: #cd7f32; }
 
-/* === רשימה (מקום 4 ומטה) === */
+
 .list-container {
     width: 100%;
     background: var(--glass);
@@ -199,7 +194,6 @@ header { text-align: center; margin-bottom: 10px; }
 .rank-num { font-weight: bold; color: #64748b; }
 .score-val { color: var(--gold); font-weight: bold; }
 
-/* === כפתור חזרה === */
 .back-btn {
     margin-top: 10px;
     padding: 12px 40px;

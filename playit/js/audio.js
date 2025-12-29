@@ -8,7 +8,6 @@ const SFX = {
     click: new Audio("../sounds/click.mp3")
 };
 
-// הגדרות כלליות
 Object.values(SFX).forEach(a => {
     a.volume = 0.7;
     a.preload = "auto";
@@ -16,7 +15,6 @@ Object.values(SFX).forEach(a => {
 
 let audioUnlocked = false;
 
-// פותח אודיו פעם אחת (חובה לדפדפן)
 function unlockAudio() {
     if (audioUnlocked) return;
     audioUnlocked = true;
@@ -32,7 +30,6 @@ function unlockAudio() {
     }).catch(() => {});
 }
 
-// ניגון רגיל
 function playSfx(type) {
     const audio = SFX[type];
     if (!audio) return;

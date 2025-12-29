@@ -14,7 +14,6 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* תבנית רקע עדינה ברקע */
      /* background:
         radial-gradient(circle at top left, #2a3cff 0%, transparent 45%),
         radial-gradient(circle at bottom right, #c77dff 0%, transparent 45%),
@@ -24,14 +23,13 @@ body {
 }
 
 .auth-wrapper {
-    /* === שינוי לטופס בהיר === */
-    background: rgba(255, 255, 255, 0.95); /* לבן כמעט אטום */
+    background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 24px;
     padding: 50px;
     width: 380px;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2); /* צל רך */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2); 
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(10px);
@@ -43,7 +41,6 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* פס צבעוני עליון */
 .auth-wrapper::before {
     content: '';
     position: absolute;
@@ -54,26 +51,25 @@ body {
 .auth-wrapper h1 {
     margin: 10px 0;
     font-size: 32px;
-    color: #1e293b; /* כותרת כהה */
+    color: #1e293b;
     font-weight: 800;
 }
 
 .auth-wrapper p {
-    color: #64748b; /* טקסט אפור */
+    color: #64748b;
     margin-bottom: 30px;
     font-size: 0.95rem;
 }
 
-/* === שדות הקלט === */
 .auth-wrapper input {
     width: 100%;
     box-sizing: border-box;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 12px;
-    border: 2px solid #e2e8f0; /* גבול אפור עדין */
-    background: #f8fafc; /* רקע אפור בהיר מאוד */
-    color: #334155; /* טקסט כהה */
+    border: 2px solid #e2e8f0; 
+    background: #f8fafc; 
+    color: #334155; 
     font-size: 16px;
     outline: none;
     transition: 0.3s;
@@ -87,13 +83,13 @@ body {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-/* === כפתור הפעולה === */
+
 .auth-wrapper button {
     width: 100%;
     padding: 15px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(90deg, #4f46e5, #7c3aed); /* סגול-כחול */
+    background: linear-gradient(90deg, #4f46e5, #7c3aed); 
     color: white;
     font-size: 18px;
     font-weight: bold;
@@ -108,7 +104,6 @@ body {
     box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
 }
 
-/* קישור הרשמה/כניסה בתחתית */
 .auth-wrapper a {
     color: var(--secondary);
     text-decoration: none;
@@ -118,7 +113,6 @@ body {
     text-decoration: underline;
 }
 
-/* כפתור חזרה לדף הבית */
 .back-home {
     position: fixed;
     top: 30px; right: 30px;

@@ -277,6 +277,9 @@ function saveStats() {
             user.stats.catcher.bestScore = score;
         }
 
+        user.totalPoints = (user.totalPoints || 0) + Number(score || 0);
+
+
         saveUsers(users);
     }
 }

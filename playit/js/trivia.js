@@ -325,6 +325,8 @@ function saveTriviaStats(finalScore, didWin) {
   user.stats.trivia.wins = user.stats.trivia.wins || 0;
   if (didWin) user.stats.trivia.wins += 1;
 
+  user.totalPoints = (user.totalPoints || 0) + Number(finalScore || 0);
+
   saveUsers(users);
 }
 

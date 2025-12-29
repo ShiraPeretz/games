@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const podiumContainer = document.getElementById("podium");
   const listContainer = document.getElementById("rankingList");
 
-  // אם האלמנטים לא קיימים – לא עושים כלום (כדי לא לקרוס)
   if (!podiumContainer || !listContainer) return;
 
   // ---------- Safe helpers ----------
@@ -118,12 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
     listContainer.appendChild(row);
   });
 
-  // ✅ בסוף – לצייר את 5 האחרונים שלי (בלי סיכון קריסה)
+  // ---------- My last 5 games ----------
   renderMyLast5Games(safeGetRecentGameHistory, safeGetCurrentUser);
 });
 
 
-// מקבלת את פונקציות ה-safe כדי שלא תפיל את הדף אם משהו חסר
+// Render my last 5 games
 function renderMyLast5Games(safeGetRecentGameHistory, safeGetCurrentUser) {
   const box = document.getElementById("myHistoryList");
   if (!box) return;

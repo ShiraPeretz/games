@@ -79,7 +79,10 @@ function fillProfileData() {
     document.getElementById("profCatcherStats").textContent =
         `Played ${user.stats.catcher.plays} times | Best score: ${user.stats.catcher.bestScore}`;
 
-    const achievementsList = document.getElementById("profAchievements");
+    document.getElementById("profTotalPoints").textContent = user.totalPoints || 0;
+
+
+    /*const achievementsList = document.getElementById("profAchievements");
     achievementsList.innerHTML = "";
 
     if (user.achievements && user.achievements.length > 0) {
@@ -90,7 +93,7 @@ function fillProfileData() {
         });
     } else {
         achievementsList.innerHTML = "<li>No achievements yet 🎯</li>";
-    }
+    }*/
 }
 
 /************************

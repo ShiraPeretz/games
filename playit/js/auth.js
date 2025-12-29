@@ -37,6 +37,7 @@ if (registerForm) {
                 trivia: { plays: 0, bestScore: 0 },
                 catcher: { plays: 0, bestScore: 0 }
             },
+            totalPoints: 0,
             achievements: []
         };
 
