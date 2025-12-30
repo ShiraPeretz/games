@@ -13,7 +13,7 @@
 <body>
 
 <header class="top-header">
-    <img src="../img/logo.png" class="small-logo" alt="logo">
+    <img src="../img/logo.png" class="small-logo " alt="logo">
 
     <nav class="categories-bar">
         <button class="cat-btn active">All</button>
@@ -32,8 +32,7 @@
 
        <button id="leaderboardBtn"
                 class="icon-btn"
-                title="Leaderboard"
-                onclick="location.href='leaderboard.html'">
+                title="Leaderboard">
             <i class="fa-solid fa-trophy"></i>
         </button>
 
@@ -92,6 +91,21 @@
         </a>-->
     </div>
 </div>
+
+<div id="leaderboardModal" class="modal">
+  <div class="modal-content leaderboard-modal">
+    <span class="close-btn" id="closeLeaderboard">&times;</span>
+
+    <iframe
+      src="leaderboard.html"
+      class="leaderboard-frame"
+      title="Hall of Fame">
+    </iframe>
+
+  </div>
+</div>
+
+
 
 
 

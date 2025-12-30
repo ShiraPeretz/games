@@ -377,3 +377,18 @@ body {
   direction: ltr;
   text-align: left;
 }
+
+.leaderboard-modal {
+  width: 900px;
+  max-width: 95%;
+  height: 85vh;
+  padding: 0;
+}
+
+.leaderboard-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 18px;
+}
+

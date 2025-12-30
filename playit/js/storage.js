@@ -1,8 +1,21 @@
 /* js/storage.js */
 
-function loadUsers() {
+/*function loadUsers() {
     return JSON.parse(localStorage.getItem("users") || "[]");
+}*/
+
+function loadUsers() {
+  try {
+    const raw = localStorage.getItem("users");
+    const parsed = JSON.parse(raw || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.error("Corrupted users in localStorage, resetting.", e);
+    localStorage.removeItem("users");
+    return [];
+  }
 }
+
 
 function saveUsers(users) {
     localStorage.setItem("users", JSON.stringify(users));
@@ -73,14 +86,14 @@ function getUserProgress(gameName) {
       localStorage.removeItem("session");
 
       // use same routing logic as requireAuth
-      if (location.pathname.includes("pages")) location.href = "../auth/login.html";
-      else location.href = "auth/login.html";
+     /* if (location.pathname.includes("pages")) location.href = "../auth/login.html";
+      else location.href = "../auth/login.html";*/
     }
   } catch {
     localStorage.removeItem("currentUser");
     localStorage.removeItem("session");
-    if (location.pathname.includes("pages")) location.href = "../auth/login.html";
-    else location.href = "auth/login.html";
+    /*if (location.pathname.includes("pages")) location.href = "../auth/login.html";
+    else location.href = "../auth/login.html";*/
   }
 })();
 
@@ -155,7 +168,7 @@ function requireAuth(loginPathFromPages = "../auth/login.html", loginPathFromRoo
 
 
 
-function requireAuth(loginPathFromPages = "../auth/login.html", loginPathFromRoot = "auth/login.html") {
+function requireAuth(loginPathFromPages = "../auth/login.html", loginPathFromRoot = "../auth/login.html") {
     const username = getCurrentUser();
     const sessionStr = localStorage.getItem("session");
 
@@ -190,10 +203,23 @@ function requireAuth(loginPathFromPages = "../auth/login.html", loginPathFromRoo
 }
 
 
-/* --- Game History (last results) --- */
+/* --- Game History (last results) --- 
 function loadGameHistory() {
   return JSON.parse(localStorage.getItem("gameHistory") || "[]");
+}*/
+
+function loadGameHistory() {
+  try {
+    const raw = localStorage.getItem("gameHistory");
+    const parsed = JSON.parse(raw || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.error("Corrupted gameHistory, resetting.", e);
+    localStorage.removeItem("gameHistory");
+    return [];
+  }
 }
+
 
 function saveGameHistory(history) {
   localStorage.setItem("gameHistory", JSON.stringify(history));

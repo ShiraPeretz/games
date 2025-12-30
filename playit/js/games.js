@@ -133,3 +133,23 @@ gamesList.forEach(game => {
 
     container.appendChild(card);
 });
+
+
+const leaderboardBtn = document.getElementById("leaderboardBtn");
+const leaderboardModal = document.getElementById("leaderboardModal");
+const closeLeaderboard = document.getElementById("closeLeaderboard");
+
+leaderboardBtn.onclick = () => {
+  leaderboardModal.style.display = "block";
+};
+
+closeLeaderboard.onclick = () => {
+  leaderboardModal.style.display = "none";
+};
+
+window.addEventListener("click", (e) => {
+  if (e.target === leaderboardModal) {
+    leaderboardModal.style.display = "none";
+  }
+});
+

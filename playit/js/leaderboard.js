@@ -1,4 +1,10 @@
 /* js/leaderboard.js */
+const params = new URLSearchParams(window.location.search);
+const isModal = params.get("mode") === "modal";
+
+if (isModal) {
+  document.body.classList.add("modal-mode");
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const podiumContainer = document.getElementById("podium");
